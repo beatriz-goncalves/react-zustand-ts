@@ -21,6 +21,7 @@ interface Store {
   usersWithAuthentication: UserAuthentication[];
   login: (user: UserAuthentication) => void;
   signup: (user: UserAuthentication) => void;
+  logout: (user: UserAuthentication) => void;
 }
 
 export const useStore = create<Store, [["zustand/devtools", never]]>(
@@ -56,8 +57,24 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
       set((state) => ({
         usersWithAuthentication: [
           ...state.usersWithAuthentication,
-          { ...user, id: state.users.length + 1, isLogged: false },
+          {
+            ...user,
+            id: state.usersWithAuthentication.length + 1,
+            isLogged: false,
+          },
         ],
       })),
+    logout: (userAuthenticated: UserAuthentication) =>
+      set((state) => {
+        const userLogout = state.usersWithAuthentication.map((user) =>
+          user.email === userAuthenticated.email
+            ? { ...user, isLogged: false }
+            : user
+        );
+        return {
+          ...state,
+          usersWithAuthentication: userLogout,
+        };
+      }),
   }))
 );
