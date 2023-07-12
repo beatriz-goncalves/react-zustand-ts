@@ -8,15 +8,7 @@ const usersInitialState: User[] = [
   { id: 2, name: "Fru Brian" },
 ];
 
-const usersWithAuthentication: UserAuthentication[] = [
-  {
-    id: 1,
-    name: "hello",
-    email: "www@www.pt",
-    password: "123456",
-    isLogged: false,
-  },
-];
+const usersWithAuthentication: UserAuthentication[] = [];
 
 const hasLogin = true;
 

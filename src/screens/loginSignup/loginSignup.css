@@ -38,3 +38,16 @@ label {
     color: #0dcaf0;
     cursor: pointer;
 }
+  
+.iconPassword {
+    position: absolute;
+    top: 50%;
+    right: 10px; 
+    cursor: pointer;
+    background-color: white;
+    color:#0dcaf0;
+}
+
+.form-group {
+    position: relative;
+}

@@ -5,6 +5,7 @@ import { useFlow } from "react-flow-app";
 import { flowManager } from "../../flows";
 import { ChangeEvent, useCallback, useState } from "react";
 import { UserAuthentication } from "./models/user";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
@@ -25,6 +26,7 @@ const LoginSignupComponent: React.FC = () => {
   const [userData, setFormUserData] =
     useState<UserAuthentication>(userInitialState);
   const [credentialsError, setCredentialsError] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onHandleSignup = useCallback(() => {
     dispatch("signup");
@@ -80,6 +82,10 @@ const LoginSignupComponent: React.FC = () => {
     });
   };
 
+  const onHandleChangePasswordVisibility = useCallback(() => {
+    setShowPassword(!showPassword);
+  }, [showPassword]);
+
   return (
     <div className="auth-form-container">
       <form className="auth-form">
@@ -114,7 +120,7 @@ const LoginSignupComponent: React.FC = () => {
           <div className="form-group mt-3">
             <label>Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="form-control mt-1"
               placeholder="Enter password"
               value={userData?.password}
@@ -122,6 +128,12 @@ const LoginSignupComponent: React.FC = () => {
               name="password"
               id="password"
             />
+            <span
+              className="iconPassword"
+              onClick={onHandleChangePasswordVisibility}
+            >
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </span>
           </div>
           <div className="d-grid gap-2 mt-3">
             {hasLogin ? (
