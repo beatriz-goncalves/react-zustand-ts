@@ -19,4 +19,10 @@ export const screens = {
     loader: (): React.LazyExoticComponent<any> =>
       React.lazy(() => import("./loginSignup/loginSignup")),
   },
+  initialPage: {
+    name: "initialPage",
+    actions: ["logout"],
+    loader: (): React.LazyExoticComponent<any> =>
+      React.lazy(() => import("./initialPage/initialPage")),
+  },
 } as const;

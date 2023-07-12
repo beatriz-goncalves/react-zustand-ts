@@ -9,6 +9,7 @@ export const example = flowManager
     authentication: {},
     example1: {},
     example2: {},
+    initialPage: {},
   });
 
 example.step("example1")({
@@ -20,7 +21,11 @@ example.step("example2")({
 });
 
 example.step("authentication")({
-  login: "example1",
+  login: "initialPage",
   signup: "authentication",
   goBack: "authentication",
+});
+
+example.step("initialPage")({
+  logout: "authentication",
 });
