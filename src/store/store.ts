@@ -28,53 +28,77 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
   devtools((set) => ({
     users: usersInitialState,
     addUser: (user: User) =>
-      set((state) => ({
-        users: [...state.users, { ...user, id: state.users.length + 1 }],
-      })),
+      set(
+        (state) => ({
+          users: [...state.users, { ...user, id: state.users.length + 1 }],
+        }),
+        false,
+        "addUser"
+      ),
     deleteUser: (userId: number) =>
-      set((state) => ({
-        users: state.users.filter((user) => user.id !== userId),
-      })),
+      set(
+        (state) => ({
+          users: state.users.filter((user) => user.id !== userId),
+        }),
+        false,
+        "deleteUser"
+      ),
     hasLogin: hasLogin,
     hasLoginAction: (value: boolean) =>
-      set(() => ({
-        hasLogin: value,
-      })),
+      set(
+        () => ({
+          hasLogin: value,
+        }),
+        false,
+        "hasLogin"
+      ),
     usersWithAuthentication: usersWithAuthentication,
     login: (userAuthenticated: UserAuthentication) =>
-      set((state) => {
-        const userWithAuth = state.usersWithAuthentication.map((user) =>
-          user.email === userAuthenticated.email
-            ? { ...user, isLogged: true }
-            : user
-        );
-        return {
-          ...state,
-          usersWithAuthentication: userWithAuth,
-        };
-      }),
+      set(
+        (state) => {
+          const userWithAuth = state.usersWithAuthentication.map((user) =>
+            user.email === userAuthenticated.email
+              ? { ...user, isLogged: true }
+              : user
+          );
+          return {
+            ...state,
+            usersWithAuthentication: userWithAuth,
+          };
+        },
+        false,
+        "login"
+      ),
     signup: (user: UserAuthentication) =>
-      set((state) => ({
-        usersWithAuthentication: [
-          ...state.usersWithAuthentication,
-          {
-            ...user,
-            id: state.usersWithAuthentication.length + 1,
-            isLogged: false,
-          },
-        ],
-      })),
+      set(
+        (state) => ({
+          usersWithAuthentication: [
+            ...state.usersWithAuthentication,
+            {
+              ...user,
+              id: state.usersWithAuthentication.length + 1,
+              isLogged: false,
+            },
+          ],
+        }),
+        false,
+        "signup"
+      ),
     logout: (userAuthenticated: UserAuthentication) =>
-      set((state) => {
-        const userLogout = state.usersWithAuthentication.map((user) =>
-          user.email === userAuthenticated.email
-            ? { ...user, isLogged: false }
-            : user
-        );
-        return {
-          ...state,
-          usersWithAuthentication: userLogout,
-        };
-      }),
+      set(
+        (state) => {
+          const userLogout = state.usersWithAuthentication.map((user) =>
+            user.email === userAuthenticated.email
+              ? { ...user, isLogged: false }
+              : user
+          );
+          return {
+            ...state,
+            usersWithAuthentication: userLogout,
+          };
+        },
+        false,
+        "logout"
+      ),
   }))
 );
