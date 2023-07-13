@@ -16,13 +16,15 @@ const LoginSignupComponent: React.FC = () => {
     isLogged: false,
   };
   const { dispatch } = useFlow(flowManager.screens.authentication);
-  const hasLogin = useStore((state) => state.hasLogin);
-  const hasLoginAction = useStore((store) => store.hasLoginAction);
-  const usersWithAuthentication = useStore(
-    (store) => store.usersWithAuthentication
-  );
-  const login = useStore((store) => store.login);
-  const signup = useStore((store) => store.signup);
+
+  const useStoreData = useStore((state) => ({
+    hasLogin: state.hasLogin,
+    hasLoginAction: state.hasLoginAction,
+    usersWithAuthentication: state.usersWithAuthentication,
+    login: state.login,
+    signup: state.signup,
+  }));
+
   const [userData, setFormUserData] =
     useState<UserAuthentication>(userInitialState);
   const [credentialsError, setCredentialsError] = useState<boolean>(false);
@@ -30,46 +32,51 @@ const LoginSignupComponent: React.FC = () => {
 
   const onHandleSignup = useCallback(() => {
     dispatch("signup");
-    hasLoginAction(false);
+    useStoreData.hasLoginAction(false);
     setFormUserData(userInitialState);
     setCredentialsError(false);
-  }, [dispatch, hasLogin]);
+  }, [dispatch, useStoreData.hasLogin]);
 
   const onHandleGoBackAction = useCallback(() => {
     dispatch("goBack");
-    hasLoginAction(true);
+    useStoreData.hasLoginAction(true);
     setFormUserData(userInitialState);
     setCredentialsError(false);
-  }, [dispatch, hasLogin]);
+  }, [dispatch, useStoreData.hasLogin]);
 
   const submitForm = useCallback(() => {
-    hasLogin ? onHandleLoginAction() : onHandleSignupAction();
-  }, [dispatch, usersWithAuthentication, userData, hasLogin]);
+    useStoreData.hasLogin ? onHandleLoginAction() : onHandleSignupAction();
+  }, [
+    dispatch,
+    useStoreData.usersWithAuthentication,
+    userData,
+    useStoreData.hasLogin,
+  ]);
 
   const onHandleLoginAction = useCallback(() => {
-    const userLogin = usersWithAuthentication.find(
+    const userLogin = useStoreData.usersWithAuthentication.find(
       (user) =>
         user.email === userData.email && user.password === userData.password
     );
 
     if (userLogin) {
       dispatch("login");
-      login(userLogin);
+      useStoreData.login(userLogin);
     } else {
       setCredentialsError(true);
     }
   }, [userData]);
 
   const onHandleSignupAction = useCallback(() => {
-    const userSignup = usersWithAuthentication.find(
+    const userSignup = useStoreData.usersWithAuthentication.find(
       (user) => user.email === userData.email
     );
     if (userSignup) {
       setCredentialsError(true);
     } else {
       dispatch("signup");
-      signup(userData);
-      hasLoginAction(true);
+      useStoreData.signup(userData);
+      useStoreData.hasLoginAction(true);
       setFormUserData(userInitialState);
       setCredentialsError(false);
     }
@@ -90,8 +97,10 @@ const LoginSignupComponent: React.FC = () => {
     <div className="auth-form-container">
       <form className="auth-form">
         <div className="auth-form-content">
-          <h3 className="auth-form-title">{hasLogin ? "Login" : "Signup"}</h3>
-          {!hasLogin && (
+          <h3 className="auth-form-title">
+            {useStoreData.hasLogin ? "Login" : "Signup"}
+          </h3>
+          {!useStoreData.hasLogin && (
             <div className="form-group mt-3">
               <label>Name</label>
               <input
@@ -136,7 +145,7 @@ const LoginSignupComponent: React.FC = () => {
             </span>
           </div>
           <div className="d-grid gap-2 mt-3">
-            {hasLogin ? (
+            {useStoreData.hasLogin ? (
               <div>
                 <h6>
                   {credentialsError
@@ -152,11 +161,11 @@ const LoginSignupComponent: React.FC = () => {
           </div>
           <div className="d-grid gap-2 mt-3">
             <Button variant="info" onClick={submitForm}>
-              {hasLogin ? "Login" : "Signup"}
+              {useStoreData.hasLogin ? "Login" : "Signup"}
             </Button>
           </div>
           <p className="text-center mt-2">
-            {hasLogin ? (
+            {useStoreData.hasLogin ? (
               <a className="actionLink" onClick={onHandleSignup}>
                 Don't have an account yet? Please create one!
               </a>
