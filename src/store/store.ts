@@ -2,6 +2,7 @@ import create from "zustand";
 import { User } from "../screens/example1/models/user";
 import { devtools } from "zustand/middleware";
 import { UserAuthentication } from "../screens/loginSignup/models/user";
+import { loadData, saveData } from "./sessionStorage/sessionStorage";
 
 const usersInitialState: User[] = [
   { id: 1, name: "Teyim Asobo" },
@@ -26,20 +27,33 @@ interface Store {
 
 export const useStore = create<Store, [["zustand/devtools", never]]>(
   devtools((set) => ({
-    users: usersInitialState,
+    users: loadData().users ? loadData().users : usersInitialState,
     addUser: (user: User) =>
       set(
-        (state) => ({
-          users: [...state.users, { ...user, id: state.users.length + 1 }],
-        }),
+        (state) => {
+          const users = [
+            ...state.users,
+            { ...user, id: state.users.length + 1 },
+          ];
+          const usersState = {
+            users: users,
+          };
+          saveData(usersState);
+          return usersState;
+        },
         false,
         "addUser"
       ),
     deleteUser: (userId: number) =>
       set(
-        (state) => ({
-          users: state.users.filter((user) => user.id !== userId),
-        }),
+        (state) => {
+          const users = state.users.filter((user) => user.id !== userId);
+          const usersState = {
+            users: users,
+          };
+          saveData(usersState);
+          return usersState;
+        },
         false,
         "deleteUser"
       ),
@@ -52,7 +66,9 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         false,
         "hasLogin"
       ),
-    usersWithAuthentication: usersWithAuthentication,
+    usersWithAuthentication: loadData().usersWithAuthentication
+      ? loadData().usersWithAuthentication
+      : usersWithAuthentication,
     login: (userAuthenticated: UserAuthentication) =>
       set(
         (state) => {
@@ -61,26 +77,34 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
               ? { ...user, isLogged: true }
               : user
           );
-          return {
+          const userWithAuthState = {
             ...state,
             usersWithAuthentication: userWithAuth,
           };
+          saveData(userWithAuthState);
+          return userWithAuthState;
         },
         false,
         "login"
       ),
     signup: (user: UserAuthentication) =>
       set(
-        (state) => ({
-          usersWithAuthentication: [
+        (state) => {
+          const usersWithAuth = [
             ...state.usersWithAuthentication,
             {
               ...user,
               id: state.usersWithAuthentication.length + 1,
               isLogged: false,
             },
-          ],
-        }),
+          ];
+          const usersWithAuthState = {
+            ...state,
+            usersWithAuthentication: usersWithAuth,
+          };
+          saveData(usersWithAuthState);
+          return usersWithAuthState;
+        },
         false,
         "signup"
       ),
@@ -92,10 +116,12 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
               ? { ...user, isLogged: false }
               : user
           );
-          return {
+          const userLogoutState = {
             ...state,
             usersWithAuthentication: userLogout,
           };
+          saveData(userLogoutState);
+          return userLogoutState;
         },
         false,
         "logout"
