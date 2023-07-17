@@ -6,7 +6,8 @@ import { useFlow } from "react-flow-app";
 import { flowManager } from "../../flows";
 import { ChangeEvent, useCallback, useState } from "react";
 import { UserAuthentication } from "./models/user";
-import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { InputComponent } from "../../components/inputs/inputs";
+import { InputPasswordComponent } from "../../components/inputs/inputPassword";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
@@ -27,14 +28,13 @@ const LoginSignupComponent: React.FC = () => {
     setFlowData: state.setFlowData,
   }));
 
-  useEffect(() => {
-    useStoreData.setFlowData({ currentPage: "authentication" });
-  }, []);
-
   const [userData, setFormUserData] =
     useState<UserAuthentication>(userInitialState);
   const [credentialsError, setCredentialsError] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  useEffect(() => {
+    useStoreData.setFlowData({ currentPage: "authentication" });
+  }, []);
 
   const onHandleSignup = useCallback(() => {
     dispatch("signup");
@@ -95,10 +95,6 @@ const LoginSignupComponent: React.FC = () => {
     });
   };
 
-  const onHandleChangePasswordVisibility = useCallback(() => {
-    setShowPassword(!showPassword);
-  }, [showPassword]);
-
   return (
     <div className="auth-form-container">
       <form className="auth-form">
@@ -108,47 +104,37 @@ const LoginSignupComponent: React.FC = () => {
           </h3>
           {!useStoreData.hasLogin && (
             <div className="form-group mt-3">
-              <label>Name</label>
-              <input
-                type="text"
-                className="form-control mt-1"
+              <InputComponent
+                label="Name"
+                id="name"
+                name="name"
                 placeholder="Enter name"
+                type="text"
                 value={userData?.name}
                 onChange={onHandleChangeUserData}
-                name="name"
-                id="name"
               />
             </div>
           )}
           <div className="form-group mt-3">
-            <label>Email address</label>
-            <input
-              type="email"
-              className="form-control mt-1"
+            <InputComponent
+              id="email"
+              label="Email Address"
+              name="email"
               placeholder="Enter email"
+              type="email"
               value={userData?.email}
               onChange={onHandleChangeUserData}
-              name="email"
-              id="email"
             />
           </div>
           <div className="form-group mt-3">
-            <label>Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control mt-1"
+            <InputPasswordComponent
+              id="password"
+              label="Password"
+              name="password"
               placeholder="Enter password"
               value={userData?.password}
               onChange={onHandleChangeUserData}
-              name="password"
-              id="password"
             />
-            <span
-              className="iconPassword"
-              onClick={onHandleChangePasswordVisibility}
-            >
-              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-            </span>
           </div>
           <div className="d-grid gap-2 mt-3">
             {useStoreData.hasLogin ? (
