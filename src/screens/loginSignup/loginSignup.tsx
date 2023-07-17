@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useStore } from "../../store/store";
 import "../loginSignup/loginSignup.css";
@@ -23,7 +24,12 @@ const LoginSignupComponent: React.FC = () => {
     usersWithAuthentication: state.usersWithAuthentication,
     login: state.login,
     signup: state.signup,
+    setFlowData: state.setFlowData,
   }));
+
+  useEffect(() => {
+    useStoreData.setFlowData({ currentPage: "authentication" });
+  }, []);
 
   const [userData, setFormUserData] =
     useState<UserAuthentication>(userInitialState);

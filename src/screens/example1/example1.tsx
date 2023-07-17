@@ -1,9 +1,8 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import React, { useEffect } from "react";
+import { ChangeEvent, useState } from "react";
 import { useStore } from "../../store/store";
 import { User } from "./models/user";
 import { Button } from "react-bootstrap";
-import { useFlow } from "react-flow-app";
-import { flowManager } from "../../flows/flowManager";
 
 export const Example1Screen: React.FC = () => {
   const userInitialState: User = {
@@ -11,9 +10,17 @@ export const Example1Screen: React.FC = () => {
     name: "",
   };
   const [user, setUser] = useState<User>(userInitialState);
-  const users = useStore((state) => state.users);
-  const handleDeleteUser = useStore((state) => state.deleteUser);
-  const handleAddUser = useStore((state) => state.addUser);
+
+  const useStoreData = useStore((state) => ({
+    users: state.users,
+    handleDeleteUser: state.deleteUser,
+    handleAddUser: state.addUser,
+    setFlowData: state.setFlowData,
+  }));
+
+  useEffect(() => {
+    useStoreData.setFlowData({ currentPage: "initialPage" });
+  }, []);
 
   const handleChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUser({
@@ -23,12 +30,12 @@ export const Example1Screen: React.FC = () => {
   };
 
   const addUserHandler = async () => {
-    handleAddUser(user);
+    useStoreData.handleAddUser(user);
     setUser(userInitialState);
   };
 
   const deleteUserHandler = (user: User) => {
-    handleDeleteUser(user.id);
+    useStoreData.handleDeleteUser(user.id);
   };
 
   return (
@@ -58,7 +65,7 @@ export const Example1Screen: React.FC = () => {
         }}
       >
         <ul style={{ textAlign: "center" }}>
-          {users?.map((user) => (
+          {useStoreData.users?.map((user) => (
             <li key={user.id}>
               {user.name}
               <Button

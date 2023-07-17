@@ -4,6 +4,10 @@ import { devtools } from "zustand/middleware";
 import { UserAuthentication } from "../screens/loginSignup/models/user";
 import { loadData, saveData } from "./sessionStorage/sessionStorage";
 
+interface FlowData {
+  currentPage: string;
+}
+
 const usersInitialState: User[] = [
   { id: 1, name: "Teyim Asobo" },
   { id: 2, name: "Fru Brian" },
@@ -23,6 +27,8 @@ interface Store {
   login: (user: UserAuthentication) => void;
   signup: (user: UserAuthentication) => void;
   logout: (user: UserAuthentication) => void;
+  flowData: FlowData;
+  setFlowData: (flow: FlowData) => void;
 }
 
 export const useStore = create<Store, [["zustand/devtools", never]]>(
@@ -44,6 +50,7 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         false,
         "addUser"
       ),
+
     deleteUser: (userId: number) =>
       set(
         (state) => {
@@ -125,6 +132,20 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         },
         false,
         "logout"
+      ),
+    flowData: loadData().flowData ? loadData().flowData : {},
+    setFlowData: (flow) =>
+      set(
+        (state) => {
+          const flowState = {
+            ...state,
+            flowData: flow,
+          };
+          saveData(flowState);
+          return flowState;
+        },
+        false,
+        "flowData"
       ),
   }))
 );
