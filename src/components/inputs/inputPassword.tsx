@@ -1,13 +1,21 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { EyeComponent } from "../eyeComponent/eye";
+import {
+  FieldError,
+  FieldErrorsImpl,
+  FieldValues,
+  Merge,
+  UseFormRegister,
+} from "react-hook-form";
 
 interface InputPasswordProps {
   label: string;
   id: string;
   name: string;
   placeholder: string;
-  value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
 }
 
 export const InputPasswordComponent: React.FC<InputPasswordProps> = ({
@@ -15,8 +23,9 @@ export const InputPasswordComponent: React.FC<InputPasswordProps> = ({
   id,
   name,
   placeholder,
-  value,
   onChange,
+  register,
+  errors,
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -36,14 +45,20 @@ export const InputPasswordComponent: React.FC<InputPasswordProps> = ({
         type={showPassword ? "text" : "password"}
         className="form-control mt-1"
         placeholder={placeholder}
-        name={name}
+        {...register(name, {
+          required: "Campo de preenchimento obrigatório!",
+          minLength: {
+            value: 7,
+            message: " A senha deve ter pelo menos 7 caracteres.",
+          },
+        })}
         onChange={onChange}
-        value={value}
       />
       <EyeComponent
         showPassword={showPassword}
         onHandleVisibility={onHandleChangePasswordVisibility}
       />
+      <p>{errors && errors.message?.toString()}</p>
     </div>
   );
 };

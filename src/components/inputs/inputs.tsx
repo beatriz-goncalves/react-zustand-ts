@@ -1,5 +1,11 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import { EyeComponent } from "../eyeComponent/eye";
+import { ChangeEvent } from "react";
+import {
+  FieldError,
+  FieldErrorsImpl,
+  FieldValues,
+  Merge,
+  UseFormRegister,
+} from "react-hook-form";
 
 interface InputProps {
   label: string;
@@ -7,8 +13,9 @@ interface InputProps {
   id: string;
   name: string;
   placeholder: string;
-  value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
 }
 
 export const InputComponent: React.FC<InputProps> = ({
@@ -17,8 +24,9 @@ export const InputComponent: React.FC<InputProps> = ({
   id,
   name,
   placeholder,
-  value,
   onChange,
+  register,
+  errors,
 }) => {
   return (
     <div className="flex flex-col w-full gap-2">
@@ -32,10 +40,12 @@ export const InputComponent: React.FC<InputProps> = ({
         type={type}
         className="form-control mt-1"
         placeholder={placeholder}
-        name={name}
+        {...register(name, {
+          required: "Campo de preenchimento obrigatório!",
+        })}
         onChange={onChange}
-        value={value}
       />
+      <p>{errors && errors.message?.toString()}</p>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { UserAuthentication } from "./models/user";
 import { InputComponent } from "../../components/inputs/inputs";
 import { InputPasswordComponent } from "../../components/inputs/inputPassword";
 import { ErrorComponent } from "../../components/errorComponent/error";
+import { useForm } from "react-hook-form";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
@@ -19,6 +20,13 @@ const LoginSignupComponent: React.FC = () => {
     isLogged: false,
   };
   const { dispatch } = useFlow(flowManager.screens.authentication);
+
+  const {
+    register,
+    formState: { errors },
+    reset,
+    handleSubmit,
+  } = useForm();
 
   const useStoreData = useStore((state) => ({
     hasLogin: state.hasLogin,
@@ -40,15 +48,15 @@ const LoginSignupComponent: React.FC = () => {
   const onHandleSignup = useCallback(() => {
     dispatch("signup");
     useStoreData.hasLoginAction(false);
-    setFormUserData(userInitialState);
     setCredentialsError(false);
+    reset(userInitialState);
   }, [dispatch, useStoreData.hasLogin]);
 
   const onHandleGoBackAction = useCallback(() => {
     dispatch("goBack");
     useStoreData.hasLoginAction(true);
-    setFormUserData(userInitialState);
     setCredentialsError(false);
+    reset(userInitialState);
   }, [dispatch, useStoreData.hasLogin]);
 
   const submitForm = useCallback(() => {
@@ -69,8 +77,10 @@ const LoginSignupComponent: React.FC = () => {
     if (userLogin) {
       dispatch("login");
       useStoreData.login(userLogin);
+      reset(userInitialState);
     } else {
       setCredentialsError(true);
+      reset(userInitialState);
     }
   }, [userData]);
 
@@ -84,8 +94,8 @@ const LoginSignupComponent: React.FC = () => {
       dispatch("signup");
       useStoreData.signup(userData);
       useStoreData.hasLoginAction(true);
-      setFormUserData(userInitialState);
       setCredentialsError(false);
+      reset(userInitialState);
     }
   }, [userData]);
 
@@ -98,7 +108,7 @@ const LoginSignupComponent: React.FC = () => {
 
   return (
     <div className="auth-form-container">
-      <form className="auth-form">
+      <form className="auth-form" onSubmit={handleSubmit(submitForm)}>
         <div className="auth-form-content">
           <h3 className="auth-form-title">
             {useStoreData.hasLogin ? "Login" : "Signup"}
@@ -111,7 +121,8 @@ const LoginSignupComponent: React.FC = () => {
                 name="name"
                 placeholder="Enter name"
                 type="text"
-                value={userData?.name}
+                register={register}
+                errors={errors.name}
                 onChange={onHandleChangeUserData}
               />
             </div>
@@ -123,7 +134,8 @@ const LoginSignupComponent: React.FC = () => {
               name="email"
               placeholder="Enter email"
               type="email"
-              value={userData?.email}
+              register={register}
+              errors={errors.email}
               onChange={onHandleChangeUserData}
             />
           </div>
@@ -133,7 +145,8 @@ const LoginSignupComponent: React.FC = () => {
               label="Password"
               name="password"
               placeholder="Enter password"
-              value={userData?.password}
+              register={register}
+              errors={errors.password}
               onChange={onHandleChangeUserData}
             />
           </div>
@@ -157,7 +170,7 @@ const LoginSignupComponent: React.FC = () => {
             )}
           </div>
           <div className="d-grid gap-2 mt-3">
-            <Button variant="info" onClick={submitForm}>
+            <Button variant="info" type="submit">
               {useStoreData.hasLogin ? "Login" : "Signup"}
             </Button>
           </div>
