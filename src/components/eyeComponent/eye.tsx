@@ -14,7 +14,8 @@ export const EyeComponent: React.FC<EyeProps> = ({
     <span
       style={{
         position: "absolute",
-        top: "50%",
+        top: "46%",
+        transform: "translateY(-50%)",
         right: "10px",
         cursor: "pointer",
         backgroundColor: "white",

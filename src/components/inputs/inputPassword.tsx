@@ -40,25 +40,27 @@ export const InputPasswordComponent: React.FC<InputPasswordProps> = ({
           {label}
         </label>
       </div>
-      <input
-        id={id}
-        type={showPassword ? "text" : "password"}
-        className="form-control mt-1"
-        placeholder={placeholder}
-        {...register(name, {
-          required: "Campo de preenchimento obrigatório!",
-          minLength: {
-            value: 7,
-            message: " A senha deve ter pelo menos 7 caracteres.",
-          },
-        })}
-        onChange={onChange}
-      />
-      <EyeComponent
-        showPassword={showPassword}
-        onHandleVisibility={onHandleChangePasswordVisibility}
-      />
-      <p>{errors && errors.message?.toString()}</p>
+      <div style={{ position: "relative" }}>
+        <input
+          id={id}
+          type={showPassword ? "text" : "password"}
+          className="form-control mt-1"
+          placeholder={placeholder}
+          {...register(name, {
+            required: "Campo de preenchimento obrigatório!",
+            minLength: {
+              value: 7,
+              message: " A senha deve ter pelo menos 7 caracteres.",
+            },
+          })}
+          onChange={onChange}
+        />
+        <EyeComponent
+          showPassword={showPassword}
+          onHandleVisibility={onHandleChangePasswordVisibility}
+        />
+      </div>
+      {errors && <p>{errors.message?.toString()}</p>}
     </div>
   );
 };

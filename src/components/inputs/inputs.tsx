@@ -45,7 +45,7 @@ export const InputComponent: React.FC<InputProps> = ({
         })}
         onChange={onChange}
       />
-      <p>{errors && errors.message?.toString()}</p>
+      {errors && <p>{errors.message?.toString()}</p>}
     </div>
   );
 };
