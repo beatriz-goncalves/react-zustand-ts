@@ -8,6 +8,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { UserAuthentication } from "./models/user";
 import { InputComponent } from "../../components/inputs/inputs";
 import { InputPasswordComponent } from "../../components/inputs/inputPassword";
+import { ErrorComponent } from "../../components/errorComponent/error";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
@@ -140,14 +141,18 @@ const LoginSignupComponent: React.FC = () => {
             {useStoreData.hasLogin ? (
               <div>
                 <h6>
-                  {credentialsError
-                    ? "O utilizador digitou inseriu credenciais erradas ou não está registado!"
-                    : ""}
+                  {credentialsError && (
+                    <ErrorComponent informationText="O utilizador inseriu credenciais erradas ou não está registado!" />
+                  )}
                 </h6>
               </div>
             ) : (
               <div>
-                <h6>{credentialsError ? "Email já registado!" : ""}</h6>
+                <h6>
+                  {credentialsError && (
+                    <ErrorComponent informationText="Email já registado!" />
+                  )}
+                </h6>
               </div>
             )}
           </div>
