@@ -80,7 +80,6 @@ const LoginSignupComponent: React.FC = () => {
       reset(userInitialState);
     } else {
       setCredentialsError(true);
-      reset(userInitialState);
     }
   }, [userData]);
 
