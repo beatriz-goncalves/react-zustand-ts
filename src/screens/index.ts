@@ -25,4 +25,10 @@ export const screens = {
     loader: (): React.LazyExoticComponent<any> =>
       React.lazy(() => import("./initialPage/initialPage")),
   },
+  users: {
+    name: "users",
+    actions: ["edit", "delete", "create"],
+    loader: (): React.LazyExoticComponent<any> =>
+      React.lazy(() => import("./usersScreen/usersScreen")),
+  },
 } as const;

@@ -1,4 +1,4 @@
-import { User } from "../screens/example1/models/user";
+import { User } from "../screens/usersScreen/models/user";
 import { api } from "../utils/axios/axiosUtils";
 
 export const getAllUsers = async (): Promise<User[]> => {

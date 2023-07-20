@@ -1,5 +1,5 @@
 import create from "zustand";
-import { User } from "../screens/example1/models/user";
+import { User } from "../screens/usersScreen/models/user";
 import { devtools } from "zustand/middleware";
 import { UserAuthentication } from "../screens/loginSignup/models/user";
 import { loadData, saveData } from "../utils/sessionStorage/sessionStorage";

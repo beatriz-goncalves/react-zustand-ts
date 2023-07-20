@@ -22,6 +22,9 @@ export const example = flowManager
     initialPage: {
       initialStep: currentStep?.flowData.currentPage === "initialPage",
     },
+    users: {
+      initialStep: currentStep?.flowData.currentPage === "users",
+    },
   });
 
 example.step("example1")({
@@ -40,4 +43,10 @@ example.step("authentication")({
 
 example.step("initialPage")({
   logout: "authentication",
+});
+
+example.step("users")({
+  create: "example1",
+  delete: "example1",
+  edit: "example1",
 });

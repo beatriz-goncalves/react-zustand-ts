@@ -10,7 +10,7 @@ import { InputComponent } from "../../components/inputs/inputs";
 import { InputPasswordComponent } from "../../components/inputs/inputPassword";
 import { ErrorComponent } from "../../components/errorComponent/error";
 import { useForm } from "react-hook-form";
-import { User } from "../example1/models/user";
+import { User } from "../usersScreen/models/user";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
