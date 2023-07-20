@@ -12,6 +12,7 @@ const hasLogin = true;
 
 interface Store {
   users: User[];
+  setUser: (user: User[]) => void;
   addUser: (user: User) => void;
   deleteUser: (userId: number) => void;
   hasLogin: boolean;
@@ -26,7 +27,20 @@ interface Store {
 
 export const useStore = create<Store, [["zustand/devtools", never]]>(
   devtools((set) => ({
-    users: loadData().users || [],
+    users: loadData().users ? loadData().users : [],
+    setUser: (users: User[]) =>
+      set(
+        (state) => {
+          const usersState = {
+            ...state,
+            users: users,
+          };
+          saveData(usersState);
+          return usersState;
+        },
+        false,
+        "setUser"
+      ),
     addUser: (user: User) =>
       set(
         (state) => {
@@ -44,7 +58,6 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         false,
         "addUser"
       ),
-
     deleteUser: (userId: number) =>
       set(
         (state) => {
