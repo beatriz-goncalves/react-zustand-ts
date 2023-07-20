@@ -10,6 +10,7 @@ import { InputComponent } from "../../components/inputs/inputs";
 import { InputPasswordComponent } from "../../components/inputs/inputPassword";
 import { ErrorComponent } from "../../components/errorComponent/error";
 import { useForm } from "react-hook-form";
+import { User } from "../example1/models/user";
 
 const LoginSignupComponent: React.FC = () => {
   const userInitialState: UserAuthentication = {
@@ -19,7 +20,13 @@ const LoginSignupComponent: React.FC = () => {
     password: "",
     isLogged: false,
   };
+
   const { dispatch } = useFlow(flowManager.screens.authentication);
+
+  const [userData, setFormUserData] =
+    useState<UserAuthentication>(userInitialState);
+
+  const [credentialsError, setCredentialsError] = useState<boolean>(false);
 
   const {
     register,
@@ -36,14 +43,6 @@ const LoginSignupComponent: React.FC = () => {
     signup: state.signup,
     setFlowData: state.setFlowData,
   }));
-
-  const [userData, setFormUserData] =
-    useState<UserAuthentication>(userInitialState);
-  const [credentialsError, setCredentialsError] = useState<boolean>(false);
-
-  useEffect(() => {
-    useStoreData.setFlowData({ currentPage: "authentication" });
-  }, []);
 
   const onHandleSignup = useCallback(() => {
     dispatch("signup");
@@ -104,6 +103,10 @@ const LoginSignupComponent: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    useStoreData.setFlowData({ currentPage: "authentication" });
+  }, []);
 
   return (
     <div className="auth-form-container">

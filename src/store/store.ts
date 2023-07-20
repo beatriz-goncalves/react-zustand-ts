@@ -2,18 +2,11 @@ import create from "zustand";
 import { User } from "../screens/example1/models/user";
 import { devtools } from "zustand/middleware";
 import { UserAuthentication } from "../screens/loginSignup/models/user";
-import { loadData, saveData } from "./sessionStorage/sessionStorage";
+import { loadData, saveData } from "../utils/sessionStorage/sessionStorage";
 
 interface FlowData {
   currentPage: string;
 }
-
-const usersInitialState: User[] = [
-  { id: 1, name: "Teyim Asobo" },
-  { id: 2, name: "Fru Brian" },
-];
-
-const usersWithAuthentication: UserAuthentication[] = [];
 
 const hasLogin = true;
 
@@ -33,7 +26,7 @@ interface Store {
 
 export const useStore = create<Store, [["zustand/devtools", never]]>(
   devtools((set) => ({
-    users: loadData().users ? loadData().users : usersInitialState,
+    users: loadData().users || [],
     addUser: (user: User) =>
       set(
         (state) => {
@@ -42,6 +35,7 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
             { ...user, id: state.users.length + 1 },
           ];
           const usersState = {
+            ...state,
             users: users,
           };
           saveData(usersState);
@@ -56,6 +50,7 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         (state) => {
           const users = state.users.filter((user) => user.id !== userId);
           const usersState = {
+            ...state,
             users: users,
           };
           saveData(usersState);
@@ -73,9 +68,7 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         false,
         "hasLogin"
       ),
-    usersWithAuthentication: loadData().usersWithAuthentication
-      ? loadData().usersWithAuthentication
-      : usersWithAuthentication,
+    usersWithAuthentication: loadData().usersWithAuthentication || [],
     login: (userAuthenticated: UserAuthentication) =>
       set(
         (state) => {
@@ -133,7 +126,7 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         false,
         "logout"
       ),
-    flowData: loadData().flowData ? loadData().flowData : {},
+    flowData: loadData() ? loadData() : {},
     setFlowData: (flow) =>
       set(
         (state) => {
