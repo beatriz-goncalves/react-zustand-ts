@@ -1,16 +1,19 @@
 import { Button, Table } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getAllUsers } from "../../services/users";
 import { useStore } from "../../store/store";
 import TableComponent from "../../components/tableComponent/table";
 import { ErrorComponent } from "../../components/errorComponent/error";
 import "../usersScreen/usersScreen.css";
+import { useFlow } from "react-flow-app";
+import { flowManager } from "../../flows";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
     users: state.users,
     setUsers: state.setUsers,
   }));
+  const { dispatch } = useFlow(flowManager.screens.users);
 
   const tableThead = [
     "#",
@@ -29,6 +32,10 @@ const UsersScreen: React.FC = () => {
         .catch((error) => console.error("ERROR: ", error));
   }, [useStoreData.users]);
 
+  const onHandleCreateUser = useCallback(() => {
+    dispatch("create");
+  }, [dispatch]);
+
   return (
     <div>
       {useStoreData.users.length > 0 ? (
@@ -38,7 +45,9 @@ const UsersScreen: React.FC = () => {
             tbdodyInformation={useStoreData.users}
           />
           <div className="add-button">
-            <Button variant="info">Create User</Button>
+            <Button variant="info" onClick={onHandleCreateUser}>
+              Create User
+            </Button>
           </div>
         </div>
       ) : (

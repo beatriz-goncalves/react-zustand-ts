@@ -31,4 +31,10 @@ export const screens = {
     loader: (): React.LazyExoticComponent<any> =>
       React.lazy(() => import("./usersScreen/usersScreen")),
   },
+  createEditUser: {
+    name: "createEditUser",
+    actions: ["goBack", "create", "edit"],
+    loader: (): React.LazyExoticComponent<any> =>
+      React.lazy(() => import("./usersScreen/createEditScreen")),
+  },
 } as const;

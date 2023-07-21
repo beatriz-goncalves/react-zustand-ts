@@ -25,6 +25,9 @@ export const example = flowManager
     users: {
       initialStep: currentStep?.flowData.currentPage === "users",
     },
+    createEditUser: {
+      initialStep: currentStep?.flowData.currentPage === "createEditUser",
+    },
   });
 
 example.step("example1")({
@@ -46,7 +49,13 @@ example.step("initialPage")({
 });
 
 example.step("users")({
-  create: "example1",
+  create: "createEditUser",
   delete: "example1",
   edit: "example1",
+});
+
+example.step("createEditUser")({
+  create: "users",
+  edit: "users",
+  goBack: "users",
 });
