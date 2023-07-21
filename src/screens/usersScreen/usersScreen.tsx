@@ -1,10 +1,10 @@
-import { Table } from "react-bootstrap";
-import { User } from "./models/user";
+import { Button, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../services/users";
 import { useStore } from "../../store/store";
 import TableComponent from "../../components/tableComponent/table";
 import { ErrorComponent } from "../../components/errorComponent/error";
+import "../usersScreen/usersScreen.css";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
@@ -32,17 +32,17 @@ const UsersScreen: React.FC = () => {
   return (
     <div>
       {useStoreData.users.length > 0 ? (
-        <TableComponent
-          theadInformation={tableThead}
-          tbdodyInformation={useStoreData.users}
-        />
+        <div>
+          <TableComponent
+            theadInformation={tableThead}
+            tbdodyInformation={useStoreData.users}
+          />
+          <div className="add-button">
+            <Button variant="info">Add User</Button>
+          </div>
+        </div>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <div className="error-component">
           <ErrorComponent informationText="Users not found!" />
         </div>
       )}
