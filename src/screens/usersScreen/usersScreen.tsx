@@ -5,19 +5,17 @@ import { getAllUsers } from "../../services/users";
 import { useStore } from "../../store/store";
 
 const UsersScreen: React.FC = () => {
-  const setUser = useStore((state) => state.setUser);
-  const [users, setUsers] = useState<User[]>([]);
+  const useStoreData = useStore((state) => ({
+    users: state.users,
+    setUsers: state.setUsers,
+  }));
 
   useEffect(() => {
-    if (users.length !== 0) {
-      setUsers(users);
-    } else {
-      getAllUsers().then((users) => {
-        setUsers(users);
-        setUser(users);
-      });
-    }
-  }, []);
+    useStoreData.users.length === 0 &&
+      getAllUsers()
+        .then((users) => useStoreData.setUsers(users))
+        .catch((error) => console.error("ERROR: ", error));
+  }, [useStoreData.users]);
 
   return (
     <Table responsive="xl">
@@ -30,8 +28,8 @@ const UsersScreen: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {users &&
-          users.map((user, index) => (
+        {useStoreData.users &&
+          useStoreData.users.map((user, index) => (
             <tr key={user.id} className="text-left">
               <td>{index + 1}</td>
               <td>{user.name}</td>
