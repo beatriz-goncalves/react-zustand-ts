@@ -55,7 +55,7 @@ example.step("users")({
 });
 
 example.step("createEditUser")({
-  create: "users",
-  edit: "users",
-  goBack: "users",
+  create: "initialPage",
+  edit: "initialPage",
+  goBack: "initialPage",
 });

@@ -1,0 +1,24 @@
+.auth-form-container-create-edit {
+    display: flex;
+}
+  
+.auth-form-create-edit {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.auth-form-title-create-edit {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 24px;
+    color: rgb(34, 34, 34);
+    font-weight: 800;
+    margin: 10px 0px 0px 0px;
+}   
+
+.submit-button{
+    margin-right: 5px;
+}
