@@ -1,0 +1,11 @@
+
+
+.table th {
+    background-color: #0dcaf0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin: 10px 20px;
+    cursor: pointer;
+}
