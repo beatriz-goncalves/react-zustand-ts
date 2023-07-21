@@ -38,7 +38,7 @@ const UsersScreen: React.FC = () => {
             tbdodyInformation={useStoreData.users}
           />
           <div className="add-button">
-            <Button variant="info">Add User</Button>
+            <Button variant="info">Create User</Button>
           </div>
         </div>
       ) : (
