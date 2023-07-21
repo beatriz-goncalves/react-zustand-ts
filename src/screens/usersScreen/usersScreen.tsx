@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers } from "../../services/users";
 import { useStore } from "../../store/store";
 import TableComponent from "../../components/tableComponent/table";
+import { ErrorComponent } from "../../components/errorComponent/error";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
@@ -30,10 +31,21 @@ const UsersScreen: React.FC = () => {
 
   return (
     <div>
-      <TableComponent
-        theadInformation={tableThead}
-        tbdodyInformation={useStoreData.users}
-      />
+      {useStoreData.users.length > 0 ? (
+        <TableComponent
+          theadInformation={tableThead}
+          tbdodyInformation={useStoreData.users}
+        />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <ErrorComponent informationText="Users not found!" />
+        </div>
+      )}
     </div>
   );
 };
