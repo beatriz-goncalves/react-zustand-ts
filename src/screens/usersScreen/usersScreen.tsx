@@ -7,6 +7,7 @@ import { ErrorComponent } from "../../components/errorComponent/error";
 import "../usersScreen/usersScreen.css";
 import { useFlow } from "react-flow-app";
 import { flowManager } from "../../flows";
+import SpinnerComponent from "../../components/spinner/spinner";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
@@ -14,6 +15,7 @@ const UsersScreen: React.FC = () => {
     setUsers: state.setUsers,
   }));
   const { dispatch } = useFlow(flowManager.screens.users);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
 
   const tableThead = [
     "#",
@@ -26,10 +28,17 @@ const UsersScreen: React.FC = () => {
   ];
 
   useEffect(() => {
-    useStoreData.users.length === 0 &&
-      getAllUsers()
-        .then((users) => useStoreData.setUsers(users))
-        .catch((error) => console.error("ERROR: ", error));
+    useStoreData.users.length === 0
+      ? getAllUsers()
+          .then((users) => {
+            useStoreData.setUsers(users);
+            setShowLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error: ", error);
+            setShowLoading(false);
+          })
+      : setShowLoading(false);
   }, [useStoreData.users]);
 
   const onHandleCreateUser = useCallback(() => {
@@ -38,7 +47,9 @@ const UsersScreen: React.FC = () => {
 
   return (
     <div>
-      {useStoreData.users.length > 0 ? (
+      {showLoading ? (
+        <SpinnerComponent />
+      ) : useStoreData.users.length > 0 ? (
         <div>
           <TableComponent
             theadInformation={tableThead}
