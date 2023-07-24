@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 interface EyeProps {

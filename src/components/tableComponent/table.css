@@ -9,3 +9,11 @@
     margin: 10px 20px;
     cursor: pointer;
 }
+
+.button-edit{
+    float: left;
+}
+
+.button-delete{
+    float: right;
+}

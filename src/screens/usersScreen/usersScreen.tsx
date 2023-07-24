@@ -25,6 +25,7 @@ const UsersScreen: React.FC = () => {
     "Phone",
     "Website",
     "Address",
+    "Actions",
   ];
 
   useEffect(() => {

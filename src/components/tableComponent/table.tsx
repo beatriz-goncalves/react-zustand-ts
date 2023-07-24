@@ -1,5 +1,7 @@
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import "../tableComponent/table.css";
+
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 interface TableComponentProps {
   theadInformation: string[];
@@ -30,6 +32,14 @@ const TableComponent: React.FC<TableComponentProps> = (props) => {
                 <td>
                   {information.address.street} - {information.address.suite},{" "}
                   {information.address.city} - {information.address.zipcode}
+                </td>
+                <td className="d-flex">
+                  <Button className="button-edit" variant="outline-dark">
+                    <AiOutlineEdit />
+                  </Button>
+                  <Button className="button-delete" variant="outline-danger">
+                    <AiOutlineDelete />
+                  </Button>
                 </td>
               </tr>
             ))}
