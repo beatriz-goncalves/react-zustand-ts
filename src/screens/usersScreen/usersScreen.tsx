@@ -8,11 +8,13 @@ import "../usersScreen/usersScreen.css";
 import { useFlow } from "react-flow-app";
 import { flowManager } from "../../flows";
 import SpinnerComponent from "../../components/spinner/spinner";
+import { User } from "./models/user";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
     users: state.users,
     setUsers: state.setUsers,
+    deleteUser: state.deleteUser,
   }));
   const { dispatch } = useFlow(flowManager.screens.users);
   const [showLoading, setShowLoading] = useState<boolean>(true);
@@ -46,6 +48,14 @@ const UsersScreen: React.FC = () => {
     dispatch("create");
   }, [dispatch]);
 
+  const onHandleDelete = useCallback((user: User) => {
+    useStoreData.deleteUser(user.id);
+  }, []);
+
+  const onHandleEdit = useCallback((user: User) => {
+    console.log("EDIT", user);
+  }, []);
+
   return (
     <div>
       {showLoading ? (
@@ -55,6 +65,8 @@ const UsersScreen: React.FC = () => {
           <TableComponent
             theadInformation={tableThead}
             tbdodyInformation={useStoreData.users}
+            onHandleDelete={onHandleDelete}
+            onHandleEdit={onHandleEdit}
           />
           <div className="add-button">
             <Button variant="info" onClick={onHandleCreateUser}>

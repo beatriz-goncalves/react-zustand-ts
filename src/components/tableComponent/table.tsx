@@ -2,17 +2,16 @@ import { Button, Table } from "react-bootstrap";
 import "../tableComponent/table.css";
 
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { User } from "../../screens/usersScreen/models/user";
 
 interface TableComponentProps {
   theadInformation: string[];
   tbdodyInformation: any[];
+  onHandleEdit: (user: User) => void;
+  onHandleDelete: (user: User) => void;
 }
 
 const TableComponent: React.FC<TableComponentProps> = (props) => {
-  const larguraEcrã = window.screen.width;
-  const alturaEcrã = window.screen.height;
-  console.log("WIDTH: ", larguraEcrã);
-  console.log("HEIGHT: ", alturaEcrã);
   return (
     <div className="table-responsive">
       <Table responsive="xl" bordered>
@@ -38,10 +37,18 @@ const TableComponent: React.FC<TableComponentProps> = (props) => {
                   {information.address.city} - {information.address.zipcode}
                 </td>
                 <td className="buttons">
-                  <Button className="button-edit" variant="outline-dark">
+                  <Button
+                    className="button-edit"
+                    variant="outline-dark"
+                    onClick={() => props.onHandleEdit(information)}
+                  >
                     <AiOutlineEdit />
                   </Button>
-                  <Button className="button-delete" variant="outline-danger">
+                  <Button
+                    className="button-delete"
+                    variant="outline-danger"
+                    onClick={() => props.onHandleDelete(information)}
+                  >
                     <AiOutlineDelete />
                   </Button>
                 </td>
