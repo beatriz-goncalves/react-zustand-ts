@@ -9,6 +9,10 @@ interface TableComponentProps {
 }
 
 const TableComponent: React.FC<TableComponentProps> = (props) => {
+  const larguraEcrã = window.screen.width;
+  const alturaEcrã = window.screen.height;
+  console.log("WIDTH: ", larguraEcrã);
+  console.log("HEIGHT: ", alturaEcrã);
   return (
     <div className="table-responsive">
       <Table responsive="xl" bordered>
@@ -33,7 +37,7 @@ const TableComponent: React.FC<TableComponentProps> = (props) => {
                   {information.address.street} - {information.address.suite},{" "}
                   {information.address.city} - {information.address.zipcode}
                 </td>
-                <td className="d-flex">
+                <td className="buttons">
                   <Button className="button-edit" variant="outline-dark">
                     <AiOutlineEdit />
                   </Button>
