@@ -32,6 +32,8 @@ const CreateEditUserScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
     setFlowData: state.setFlowData,
     addUser: state.addUser,
+    userEdit: state.userEdit,
+    setUserEdit: state.setUserEdit,
   }));
 
   const {
@@ -55,6 +57,7 @@ const CreateEditUserScreen: React.FC = () => {
     useStoreData.addUser(userFormData);
     dispatch("create");
     setUserFormData(userInitialState);
+    useStoreData.setUserEdit();
   }, [userFormData]);
 
   const submitForm = useCallback(() => {
@@ -63,6 +66,7 @@ const CreateEditUserScreen: React.FC = () => {
 
   const onHandleGoBackAction = useCallback(() => {
     dispatch("goBack");
+    useStoreData.setUserEdit();
   }, [dispatch]);
 
   useEffect(() => {

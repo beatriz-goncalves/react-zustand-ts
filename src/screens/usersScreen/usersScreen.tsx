@@ -15,6 +15,7 @@ const UsersScreen: React.FC = () => {
     users: state.users,
     setUsers: state.setUsers,
     deleteUser: state.deleteUser,
+    setUserEdit: state.setUserEdit,
   }));
   const { dispatch } = useFlow(flowManager.screens.users);
   const [showLoading, setShowLoading] = useState<boolean>(true);
@@ -46,6 +47,7 @@ const UsersScreen: React.FC = () => {
 
   const onHandleCreateUser = useCallback(() => {
     dispatch("create");
+    useStoreData.setUserEdit();
   }, [dispatch]);
 
   const onHandleDelete = useCallback((user: User) => {
@@ -53,7 +55,8 @@ const UsersScreen: React.FC = () => {
   }, []);
 
   const onHandleEdit = useCallback((user: User) => {
-    console.log("EDIT", user);
+    dispatch("edit");
+    useStoreData.setUserEdit(user);
   }, []);
 
   return (

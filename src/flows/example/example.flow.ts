@@ -51,7 +51,7 @@ example.step("initialPage")({
 example.step("users")({
   create: "createEditUser",
   delete: "example1",
-  edit: "example1",
+  edit: "createEditUser",
 });
 
 example.step("createEditUser")({
