@@ -8,6 +8,7 @@ import { InputComponent } from "../../components/inputs/inputs";
 import "../usersScreen/createEditScreen.css";
 import { User } from "./models/user";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const CreateEditUserScreen: React.FC = () => {
   const { dispatch } = useFlow(flowManager.screens.createEditUser);
@@ -62,12 +63,18 @@ const CreateEditUserScreen: React.FC = () => {
     dispatch("create");
     setUserFormData(userInitialState);
     useStoreData.setUserEdit();
+    toast.success(`User ${userFormData.name} was created!`, {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   }, [userFormData]);
 
   const onHandleEditUser = useCallback(() => {
     dispatch("edit");
     useStoreData.editUser(userFormData);
     useStoreData.setUserEdit();
+    toast.success(`User ${userFormData.name} was edited!`, {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   }, [userFormData]);
 
   const submitForm = useCallback(() => {

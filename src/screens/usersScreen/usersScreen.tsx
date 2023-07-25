@@ -9,6 +9,7 @@ import { useFlow } from "react-flow-app";
 import { flowManager } from "../../flows";
 import SpinnerComponent from "../../components/spinner/spinner";
 import { User } from "./models/user";
+import { toast } from "react-toastify";
 
 const UsersScreen: React.FC = () => {
   const useStoreData = useStore((state) => ({
@@ -52,6 +53,9 @@ const UsersScreen: React.FC = () => {
 
   const onHandleDelete = useCallback((user: User) => {
     useStoreData.deleteUser(user.id);
+    toast.success(`User ${user.name} was deleted!`, {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   }, []);
 
   const onHandleEdit = useCallback((user: User) => {
