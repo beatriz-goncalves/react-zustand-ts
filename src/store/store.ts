@@ -16,6 +16,7 @@ interface Store {
   userEdit: User;
   setUserEdit: (user?: User) => void;
   addUser: (user: User) => void;
+  editUser: (user: User) => void;
   deleteUser: (userId: number) => void;
   hasLogin: boolean;
   hasLoginAction: (value: boolean) => void;
@@ -73,6 +74,24 @@ export const useStore = create<Store, [["zustand/devtools", never]]>(
         },
         false,
         "addUser"
+      ),
+    editUser: (user: User) =>
+      set(
+        (state) => {
+          const userEdit = state.users.map((currentUser) =>
+            currentUser.id === user.id
+              ? { ...currentUser, ...user }
+              : currentUser
+          );
+          const userState = {
+            ...state,
+            users: userEdit,
+          };
+          saveData(userState);
+          return userState;
+        },
+        false,
+        "editUser"
       ),
     deleteUser: (userId: number) =>
       set(

@@ -7,7 +7,7 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { InputComponent } from "../../components/inputs/inputs";
 import "../usersScreen/createEditScreen.css";
 import { User } from "./models/user";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 
 const CreateEditUserScreen: React.FC = () => {
   const { dispatch } = useFlow(flowManager.screens.createEditUser);
@@ -34,13 +34,17 @@ const CreateEditUserScreen: React.FC = () => {
     addUser: state.addUser,
     userEdit: state.userEdit,
     setUserEdit: state.setUserEdit,
+    editUser: state.editUser,
   }));
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+    setValue,
+  } = useForm<FieldValues>({
+    defaultValues: useStoreData.userEdit || userInitialState,
+  });
 
   const onHandleUserData = (e: ChangeEvent<HTMLInputElement>) => {
     setUserFormData({
@@ -60,9 +64,19 @@ const CreateEditUserScreen: React.FC = () => {
     useStoreData.setUserEdit();
   }, [userFormData]);
 
+  const onHandleEditUser = useCallback(() => {
+    dispatch("edit");
+    useStoreData.editUser(userFormData);
+    useStoreData.setUserEdit();
+  }, [userFormData]);
+
   const submitForm = useCallback(() => {
-    onHandleCreateUserAction();
-  }, [dispatch, userFormData, userFormData]);
+    if (useStoreData.userEdit) {
+      onHandleEditUser();
+    } else {
+      onHandleCreateUserAction();
+    }
+  }, [dispatch, userFormData]);
 
   const onHandleGoBackAction = useCallback(() => {
     dispatch("goBack");
@@ -73,6 +87,18 @@ const CreateEditUserScreen: React.FC = () => {
     useStoreData.setFlowData({ currentPage: "createEditUser" });
   }, []);
 
+  useEffect(() => {
+    if (useStoreData.userEdit) {
+      setUserFormData(useStoreData.userEdit);
+      setValue("street", useStoreData.userEdit.address.street);
+      setValue("suite", useStoreData.userEdit.address.suite);
+      setValue("city", useStoreData.userEdit.address.city);
+      setValue("zipcode", useStoreData.userEdit.address.zipcode);
+    } else {
+      setUserFormData(userInitialState);
+    }
+  }, [useStoreData.userEdit, setValue]);
+
   return (
     <div>
       <NavbarComponent dispatch={dispatch} />
@@ -82,7 +108,9 @@ const CreateEditUserScreen: React.FC = () => {
           onSubmit={handleSubmit(submitForm)}
         >
           <div className="auth-form-content-create-edit">
-            <h3 className="auth-form-title-create-edit">Create User</h3>
+            <h3 className="auth-form-title-create-edit">
+              {useStoreData.userEdit ? "Edit User" : "Create User"}
+            </h3>
             <Container>
               <Row className="row-cols-3">
                 <Col>
@@ -202,7 +230,7 @@ const CreateEditUserScreen: React.FC = () => {
                     variant="info"
                     className="submit-button"
                   >
-                    Submit
+                    {useStoreData.userEdit ? "Edit" : "Submit"}
                   </Button>
                   <Button variant="outline-info" onClick={onHandleGoBackAction}>
                     Go Back
