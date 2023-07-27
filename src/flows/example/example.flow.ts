@@ -58,4 +58,5 @@ example.step("createEditUser")({
   create: "initialPage",
   edit: "initialPage",
   goBack: "initialPage",
+  logout: "authentication",
 });
